@@ -1,0 +1,6 @@
+lib/
+build_android.sh 
+raylib/
+build/
+android/
+src/*.o 
