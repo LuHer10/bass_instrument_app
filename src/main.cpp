@@ -1,6 +1,7 @@
 #include "../include/raylib.h"
 //#include "../include/touch.hpp"
-#include "../include/button.hpp"
+//#include "../include/button.hpp"
+#include "../include/surface.hpp"
 
 int main()
 {
@@ -10,10 +11,11 @@ int main()
     int screen_width = GetScreenWidth();
     int screen_height = GetScreenHeight();
 
-    int touch_points = 0;
+    //Button button;
+    //button.init(screen_width/2 - 80, screen_height/2 - 80, 160, 160, YELLOW);
 
-    Button button;
-    button.init(screen_width/2 - 80, screen_height/2 - 80, 160, 160, YELLOW);
+    Surface surface;
+    surface.init(5, 15);
 
     while(WindowShouldClose() == false)
     {
@@ -21,12 +23,16 @@ int main()
         
 
         //updating
-        button.pressed();
+        //button.pressed();
 
         //Drawing
         ClearBackground(BLACK);
+        surface.draw();
+
+        //button activation
+        surface.pressed();
         
-        button.draw();
+        //button.draw();
        
         EndDrawing();
     }

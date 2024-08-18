@@ -8,7 +8,7 @@ private:
     int width, height;
     Color color, r_color, p_color;
     char label;
-    bool state;
+    bool state, preState;
 public:
     Button(){}
     void init(int _x, int _y, int _width, int _height, Color _color/*, char _label*/)
@@ -28,23 +28,52 @@ public:
 
     void draw();
     bool pressed();
+    bool getState(){return state;}
+    bool up_flank()
+    {
+        if(state && (state != preState))
+        {
+            preState = state;
+            return true;
+        }
+        preState = state;
+        return false;
+    }
+    bool dn_flank()
+    {
+        if(!state && (state != preState))
+        {
+            preState = state;
+            return true;
+        }
+        preState = state;
+        return false;
+    }
 };
+
+void update(){touch.updatePress();}
 
 void Button::draw()
 {
     DrawRectangle(x, y, width, height, color);
 }
 
+
 bool Button::pressed()
 {
-    touch.updatePress();
+    bool cond;
+    //touch.updatePress();
     for(int i = 0; i < MAX_TOUCH; i++)
     {
         int touch_x = touch.pos[i].x;
         int touch_y = touch.pos[i].y;
-        bool cond = (touch_x > x) && (touch_x < x + width) && 
+        cond = (touch_x > x) && (touch_x < x + width) && 
                     (touch_y > y) && (touch_y < y + height);
-        if(cond)
+        if(cond) break;
+        
+    }
+
+    if(cond)
         {
             color = p_color;
             state = 1;
@@ -52,25 +81,6 @@ bool Button::pressed()
         }
         color = r_color;
         return 0;
-    }
-    /*
-    int mouse_x = GetMouseX();
-    int mouse_y = GetMouseY();
-    bool cond = (mouse_x > x) && (mouse_x < x + width) && 
-                (mouse_y > y) && (mouse_y < y + height);
-    if(IsMouseButtonDown(MOUSE_BUTTON_LEFT) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT))
-    {
-        if(cond)
-        {
-            color = p_color;
-            state = 1;
-            return 1;
-        }
-        color = r_color;
-        return 0;
-    }
-    color = r_color;
-    return 0;
-    */
+    
 }
 
