@@ -12,7 +12,8 @@ public:
     Button rep2_l, rep2_r;
     Button mute_l, mute_r;
 
-    Button grid[ROWS][COLS];
+    Button grid[ROWS*COLS];
+    int states[ROWS];
 
     bool sustain_l_state, sustain_r_state;
     bool sust_switch_l_state, sust_switch_r_state;
@@ -30,8 +31,6 @@ public:
     void init()
     {
         
-        
-
         width = GetScreenWidth();
         height = GetScreenHeight();
         //left side
@@ -53,7 +52,7 @@ public:
         {
             for(int j = 0; j < COLS; j++)
             {
-                grid[i][j].init((j+1)*width/cols, i*height/rows, width/cols, height/rows, BLUE);
+                grid[i*COLS + j].init((j+1)*width/cols, i*height/rows, width/cols, height/rows, BLUE);
             }
         }
     }
@@ -71,11 +70,11 @@ public:
     void draw()
     {
         //Grid
-        for(int i = 0; i < rows; i++)
+        for(int i = 0; i < ROWS; i++)
         {
-            for(int j = 0; j < cols-2; j++)
+            for(int j = 0; j < COLS; j++)
             {
-                grid[i][j].draw();
+                grid[i*COLS + j].draw();
             }
         }
         for(int i = 0; i < rows; i++)
@@ -120,13 +119,18 @@ public:
         repeat_r.pressed();
         rep2_r.pressed();
 
-        for(int i = 0; i < rows; i++)
+        int pressed = 0;
+        for(int i = 0; i < ROWS; i++)
         {
-            for(int j = 0; j < cols-2; j++)
+            states[i] = -1;
+            for(int j = 0; j < COLS; j++)
             {
-                grid[i][j].pressed();
+                pressed = (j+1) * grid[i*COLS + j].pressed();
+                if(pressed)states[i] = pressed - 1;
             }
         }
+
+        DrawText(TextFormat("%i", states[0]),0, 0, 80, WHITE);
 
     }
 
