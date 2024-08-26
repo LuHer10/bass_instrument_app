@@ -15,7 +15,7 @@ int main()
     //button.init(screen_width/2 - 80, screen_height/2 - 80, 160, 160, YELLOW);
 
     Surface surface;
-    surface.init(5, 15);
+    surface.init();
 
     while(WindowShouldClose() == false)
     {
